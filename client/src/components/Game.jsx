@@ -36,10 +36,15 @@ export default function Game({ state, onAction, onLeave }) {
 
   const focus = phase === 'answering' || phase === 'reveal';
 
-  return (
-    <div className={`game ${flash ? 'celebrate' : ''}`}>
-      {flash && <div className="flash-overlay" />}
+  // 判定 → 演出を見せてから次へ（ホストのみ実行）
+  const judgeThenContinue = (award, celebrate) => {
+    emit('judge', { award, celebrate });
+    const delay = celebrate ? 1900 : 700;
+    setTimeout(() => emit('continue'), delay);
+  };
 
+  return (
+    <div className="game">
       <div className="room-head card">
         <div>
           <span className="label">あいことば</span>
@@ -71,7 +76,7 @@ export default function Game({ state, onAction, onLeave }) {
               state={state}
               isHost={isHost}
               flash={flash}
-              onJudge={(award, celebrate) => emit('judge', { award, celebrate })}
+              onJudge={judgeThenContinue}
             />
           ) : null}
         </main>
@@ -211,7 +216,9 @@ function Reveal({ state, isHost, flash, onJudge }) {
         ))}
       </div>
 
-      {isHost ? (
+      {state.judged ? (
+        <p className="center-msg hint">{flash ? '🎉 全員一致！' : '集計中…'}</p>
+      ) : isHost ? (
         <div className="judge-box simple">
           <button className="btn match-btn" onClick={() => onJudge(1, true)}>🎉 全員一致！（+1）</button>
           <button className="btn wide" onClick={() => onJudge(0, false)}>不一致（+0）</button>

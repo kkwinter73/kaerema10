@@ -557,23 +557,17 @@ input::placeholder, textarea::placeholder { color: var(--ink-faint); }
 }
 .btn.wide { width: 100%; max-width: 440px; }
 
-/* 全員一致の赤い発光オーバーレイ */
-.flash-overlay {
-  position: fixed; inset: 0; z-index: 40; pointer-events: none;
-  background: radial-gradient(circle at 50% 45%, rgba(255, 95, 86, 0.38), rgba(255, 95, 86, 0) 62%);
-  animation: flashPulse 1.7s ease-out forwards;
+/* 全員一致：回答カードが赤く光る（.answer-list.lit で適用） */
+.answer-card.big {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
-@keyframes flashPulse {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  60% { opacity: 0.7; }
-  100% { opacity: 0; }
+.answer-list.lit .answer-card {
+  animation: cardGlow 1.7s ease-out;
 }
-.game.celebrate .progress { animation: shake 0.5s ease; }
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+@keyframes cardGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 95, 86, 0); }
+  20% { box-shadow: 0 0 0 3px rgba(255, 95, 86, 0.65), 0 0 34px rgba(255, 95, 86, 0.7); }
+  100% { box-shadow: 0 0 0 2px rgba(255, 95, 86, 0.4), 0 0 22px rgba(255, 95, 86, 0.4); }
 }
 
 @media (max-width: 720px) {
