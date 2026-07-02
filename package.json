@@ -1,0 +1,21 @@
+{
+  "name": "kaerema10",
+  "version": "1.0.0",
+  "private": true,
+  "description": "終われま10 — Zoom向けイッセーので系マルチプレイゲーム（Vercel対応）",
+  "scripts": {
+    "dev": "concurrently -n api,web -c green,cyan \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "node --watch server/dev.js",
+    "dev:client": "npm --prefix client run dev",
+    "build": "npm --prefix client install && npm --prefix client run build",
+    "start": "node server/dev.js",
+    "install:all": "npm install && npm --prefix client install"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.34.3",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
