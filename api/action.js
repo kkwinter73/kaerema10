@@ -23,6 +23,7 @@ module.exports = async (req, res) => {
       case 'submitAnswer': r = game.submitAnswer(room, playerId, payload?.answer, now); break;
       case 'reveal': r = game.reveal(room, playerId); break;
       case 'judge': r = game.judge(room, playerId, payload?.award, payload?.celebrate); break;
+      case 'continue': r = game.continueRound(room, playerId); break;
       case 'reset': r = game.resetGame(room, playerId); break;
       default: r = { ok: false, error: '不明な操作です' };
     }
