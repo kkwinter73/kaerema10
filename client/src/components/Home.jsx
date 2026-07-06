@@ -9,19 +9,14 @@ export default function Home({ onCreate, onJoin }) {
 
   return (
     <div className="home">
-      <div className="term home-hero">
-        <div className="term-titlebar">
-          <span className="term-dots">
-            <span className="term-dot r" />
-            <span className="term-dot y" />
-            <span className="term-dot g" />
-          </span>
-          <span className="term-title">~/party — 終われま10</span>
-        </div>
-        <div className="term-body">
-          <h2 className="h1 title-xl">終われま<span className="accent">10</span></h2>
-          <p className="tagline">みんなで「せーの！」。10回一致したら、帰れる。</p>
+      <div className="hero">
+        <p className="hero-eyebrow">— 全員一致パーティーゲーム —</p>
+        <h2 className="hero-title">
+          終われま<span className="num">10</span>
+        </h2>
+        <p className="tagline">みんなで「せーの！」。10回一致したら、帰れる。</p>
 
+        <div className="hero-panel">
           <label className="field">
             <span>あなたの名前</span>
             <input

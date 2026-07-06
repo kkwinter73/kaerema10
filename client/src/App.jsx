@@ -126,7 +126,7 @@ export default function App() {
         <Game state={state} onAction={doAction} onLeave={leave} />
       )}
 
-      <footer className="foot">$ Zoomをつなぎながら、各自の端末から参加してね</footer>
+      <footer className="foot">Zoomをつなぎながら、各自の端末から参加してね</footer>
     </div>
   );
 }
