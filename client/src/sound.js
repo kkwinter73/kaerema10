@@ -36,5 +36,7 @@ export function playClick() { if (!muted) tone(680, 0, 0.07, 'square', 0.12); }
 export function playReveal() { if (muted) return; tone(440, 0, 0.12, 'triangle', 0.16); tone(660, 0.09, 0.16, 'triangle', 0.16); }
 // 全員一致のファンファーレ（ドミソド）
 export function playMatch() { if (muted) return; [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.09, 0.28, 'sine', 0.22)); }
+// 不一致のブザー（ブッブー）
+export function playWrong() { if (muted) return; tone(196, 0, 0.2, 'sawtooth', 0.18); tone(147, 0.18, 0.3, 'sawtooth', 0.18); }
 // クリアの盛大なファンファーレ
 export function playClear() { if (muted) return; [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.13, 0.45, 'triangle', 0.24)); }

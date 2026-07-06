@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ProgressBar from './ProgressBar.jsx';
 import PlayerList from './PlayerList.jsx';
 import DrawCanvas from './DrawCanvas.jsx';
-import { playClick, playReveal, playMatch, playClear } from '../sound.js';
+import { playClick, playReveal, playMatch, playWrong, playClear } from '../sound.js';
 
 export default function Game({ state, onAction, onLeave }) {
   const { phase, you, cleared } = state;
@@ -11,7 +11,9 @@ export default function Game({ state, onAction, onLeave }) {
 
   // --- 演出（音・赤い発光） ---
   const [flash, setFlash] = useState(false);
+  const [missFlash, setMissFlash] = useState(false);
   const seqRef = useRef(state.celebrateSeq);
+  const missRef = useRef(state.missSeq);
   const phaseRef = useRef(phase);
   const clearedRef = useRef(cleared);
 
@@ -24,6 +26,16 @@ export default function Game({ state, onAction, onLeave }) {
       return () => clearTimeout(t);
     }
   }, [state.celebrateSeq]);
+
+  useEffect(() => {
+    if (state.missSeq !== missRef.current) {
+      missRef.current = state.missSeq;
+      setMissFlash(true);
+      playWrong();
+      const t = setTimeout(() => setMissFlash(false), 1200);
+      return () => clearTimeout(t);
+    }
+  }, [state.missSeq]);
 
   useEffect(() => {
     if (phase === 'reveal' && phaseRef.current !== 'reveal') playReveal();
@@ -39,7 +51,7 @@ export default function Game({ state, onAction, onLeave }) {
   // 判定 → 演出を見せてから次へ（ホストのみ実行）
   const judgeThenContinue = (award, celebrate) => {
     emit('judge', { award, celebrate });
-    const delay = celebrate ? 1900 : 700;
+    const delay = celebrate ? 1900 : 1200; // 不一致は不正解音を鳴らしてから次へ
     setTimeout(() => emit('continue'), delay);
   };
 
@@ -76,6 +88,7 @@ export default function Game({ state, onAction, onLeave }) {
               state={state}
               isHost={isHost}
               flash={flash}
+              missFlash={missFlash}
               onJudge={judgeThenContinue}
             />
           ) : null}
@@ -195,7 +208,7 @@ function Answering({ state, isHost, onSubmit, onReveal }) {
   );
 }
 
-function Reveal({ state, isHost, flash, onJudge }) {
+function Reveal({ state, isHost, flash, missFlash, onJudge }) {
   return (
     <div className="reveal center-stage">
       <div className="topic-hero small">
@@ -217,7 +230,7 @@ function Reveal({ state, isHost, flash, onJudge }) {
       </div>
 
       {state.judged ? (
-        <p className="center-msg hint">{flash ? '🎉 全員一致！' : '集計中…'}</p>
+        <p className="center-msg hint">{flash ? '🎉 全員一致！' : missFlash ? '残念…不一致' : '集計中…'}</p>
       ) : isHost ? (
         <div className="judge-box simple">
           <button className="btn match-btn" onClick={() => onJudge(1, true)}>🎉 全員一致！（+1）</button>
